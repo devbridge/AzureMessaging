@@ -14,6 +14,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{A1B35D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Devbridge.AzureMessaging.Tests", "Devbridge.AzureMessaging.Tests\Devbridge.AzureMessaging.Tests.csproj", "{5BC8E56D-D6E4-4E6E-8042-FCD783690966}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sample", "Sample", "{F27FEBAC-4187-4F82-93F0-78E18290A855}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Devbridge.AzureMessaging.Sample.Server", "Devbridge.AzureMessaging.Sample.Server\Devbridge.AzureMessaging.Sample.Server.csproj", "{81A46AB6-6950-4035-A94D-20507A56E5E2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Devbridge.AzureMessaging.Sample.Common", "Devbridge.AzureMessaging.Sample.Common\Devbridge.AzureMessaging.Sample.Common.csproj", "{9326B1E9-5213-4DC8-ADFA-178517AF8872}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Devbridge.AzureMessaging.Sample.Client", "Devbridge.AzureMessaging.Sample.Client\Devbridge.AzureMessaging.Sample.Client.csproj", "{F5FA4CD6-6C93-4DD3-89A6-4A654C9230AF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,8 +36,25 @@ Global
 		{5BC8E56D-D6E4-4E6E-8042-FCD783690966}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5BC8E56D-D6E4-4E6E-8042-FCD783690966}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5BC8E56D-D6E4-4E6E-8042-FCD783690966}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81A46AB6-6950-4035-A94D-20507A56E5E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81A46AB6-6950-4035-A94D-20507A56E5E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81A46AB6-6950-4035-A94D-20507A56E5E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81A46AB6-6950-4035-A94D-20507A56E5E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9326B1E9-5213-4DC8-ADFA-178517AF8872}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9326B1E9-5213-4DC8-ADFA-178517AF8872}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9326B1E9-5213-4DC8-ADFA-178517AF8872}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9326B1E9-5213-4DC8-ADFA-178517AF8872}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5FA4CD6-6C93-4DD3-89A6-4A654C9230AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5FA4CD6-6C93-4DD3-89A6-4A654C9230AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5FA4CD6-6C93-4DD3-89A6-4A654C9230AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5FA4CD6-6C93-4DD3-89A6-4A654C9230AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{81A46AB6-6950-4035-A94D-20507A56E5E2} = {F27FEBAC-4187-4F82-93F0-78E18290A855}
+		{9326B1E9-5213-4DC8-ADFA-178517AF8872} = {F27FEBAC-4187-4F82-93F0-78E18290A855}
+		{F5FA4CD6-6C93-4DD3-89A6-4A654C9230AF} = {F27FEBAC-4187-4F82-93F0-78E18290A855}
 	EndGlobalSection
 EndGlobal

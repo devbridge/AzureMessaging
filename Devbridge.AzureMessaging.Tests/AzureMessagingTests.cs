@@ -18,7 +18,6 @@ namespace Devbridge.AzureMessaging.Tests
             var queueClientFactory = new QueueClientFactory(ConnectionString);
             var server = new AzureMessageService(queueClientFactory);
 
-
             var client = server.MessageFactory.CreateMessageQueueClient();
             var handlerCallCount = 0;
             var settings = new MessageHandlerSettings
