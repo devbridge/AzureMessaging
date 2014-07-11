@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{A1B35D
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Devbridge.AzureMessaging.Tests", "Devbridge.AzureMessaging.Tests\Devbridge.AzureMessaging.Tests.csproj", "{5BC8E56D-D6E4-4E6E-8042-FCD783690966}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -22,6 +24,10 @@ Global
 		{904E1E36-5536-417C-A91F-89834BFA2365}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{904E1E36-5536-417C-A91F-89834BFA2365}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{904E1E36-5536-417C-A91F-89834BFA2365}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5BC8E56D-D6E4-4E6E-8042-FCD783690966}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BC8E56D-D6E4-4E6E-8042-FCD783690966}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BC8E56D-D6E4-4E6E-8042-FCD783690966}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BC8E56D-D6E4-4E6E-8042-FCD783690966}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
