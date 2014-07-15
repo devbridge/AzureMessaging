@@ -72,6 +72,7 @@
     <Compile Include="Extensions\TypeExtensions.cs" />
     <Compile Include="InMemory\InMemoryQueueClient.cs" />
     <Compile Include="InMemory\InMemoryQueueClientFactory.cs" />
+    <Compile Include="AzureMessage.cs" />
     <Compile Include="Interfaces\IAzureMessage.cs" />
     <Compile Include="Interfaces\IAzureMessageHandler.cs" />
     <Compile Include="Interfaces\IAzureMessageHandlerFactory.cs" />
@@ -83,6 +84,7 @@
     <Compile Include="Interfaces\IMessageQueueClient.cs" />
     <Compile Include="Interfaces\IMessageQueueClientFactory.cs" />
     <Compile Include="Interfaces\IMessageService.cs" />
+    <Compile Include="InMemory\InMemoryAzureMessage.cs" />
     <Compile Include="Message.cs" />
     <Compile Include="MessageHandlerSettings.cs" />
     <Compile Include="MessageHandlerStats.cs" />
