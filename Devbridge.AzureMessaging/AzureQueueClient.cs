@@ -44,7 +44,10 @@ namespace Devbridge.AzureMessaging
             try
             {
                 var qc = result.AsyncState as QueueClient;
-                if (qc != null) qc.EndSend(result);
+                if (qc != null)
+                {
+                    qc.EndSend(result);
+                }
             }
             catch (Exception e)
             {

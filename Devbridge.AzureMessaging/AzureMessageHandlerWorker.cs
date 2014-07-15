@@ -13,6 +13,9 @@ namespace Devbridge.AzureMessaging
         readonly object msgLock = new object();
 
         private readonly IAzureMessageHandler messageHandler;
+        private Thread bgThread;
+
+        public Action<AzureMessageHandlerWorker, Exception> ErrorHandler { get; set; }
 
         public string QueueName { get; set; }
 
@@ -22,9 +25,11 @@ namespace Devbridge.AzureMessaging
             get { return status; }
         }
 
-        private Thread bgThread;
         private int timesStarted;
-        public Action<AzureMessageHandlerWorker, Exception> ErrorHandler { get; set; }
+        public int TimesStarted
+        {
+            get { return timesStarted; }
+        }
 
         private DateTime lastMsgProcessed;
         public DateTime LastMsgProcessed
@@ -39,13 +44,13 @@ namespace Devbridge.AzureMessaging
         }
 
         private int msgNotificationsReceived;
-        private bool processingMessage;
-        private readonly IAzureQueueClientFactory queueClientFactory;
-
         public int MsgNotificationsReceived
         {
             get { return msgNotificationsReceived; }
         }
+
+        private bool processingMessage;
+        private readonly IAzureQueueClientFactory queueClientFactory;
 
         public AzureMessageHandlerWorker(IAzureQueueClientFactory queueClientFactory, IAzureMessageHandler messageHandler, string queueName, Action<AzureMessageHandlerWorker, Exception> errorHandler)
         {
@@ -58,11 +63,19 @@ namespace Devbridge.AzureMessaging
         public void Start()
         {
             if (Interlocked.CompareExchange(ref status, 0, 0) == WorkerStatus.Started)
+            {
                 return;
+            }
+
             if (Interlocked.CompareExchange(ref status, 0, 0) == WorkerStatus.Disposed)
+            {
                 throw new ObjectDisposedException("MQ Host has been disposed");
+            }
+
             if (Interlocked.CompareExchange(ref status, 0, 0) == WorkerStatus.Stopping)
+            {
                 KillBgThreadIfExists();
+            }
 
             if (Interlocked.CompareExchange(ref status, WorkerStatus.Starting, WorkerStatus.Stopped) == WorkerStatus.Stopped)
             {
@@ -88,7 +101,10 @@ namespace Devbridge.AzureMessaging
         /// </summary>
         private void Run()
         {
-            if (Interlocked.CompareExchange(ref status, WorkerStatus.Started, WorkerStatus.Starting) != WorkerStatus.Starting) return;
+            if (Interlocked.CompareExchange(ref status, WorkerStatus.Started, WorkerStatus.Starting) != WorkerStatus.Starting)
+            {
+                return;
+            }
             timesStarted++;
 
             try
@@ -215,7 +231,9 @@ namespace Devbridge.AzureMessaging
         public void Stop()
         {
             if (Interlocked.CompareExchange(ref status, 0, 0) == WorkerStatus.Disposed)
+            {
                 return;
+            }
 
             if (Interlocked.CompareExchange(ref status, WorkerStatus.Stopping, WorkerStatus.Started) == WorkerStatus.Started)
             {

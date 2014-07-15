@@ -16,17 +16,12 @@ namespace Devbridge.AzureMessaging
 
         private readonly IAzureQueueClientFactory queueClientFactory;
 
-        public const int DefaultRetryCount = 2; //Will be a total of 3 attempts
-
         public int RetryCount { get; protected set; }
-
-        public int? KeepAliveRetryAfterMs { get; set; }
 
         //Stats
         private long timesStarted;
         private long noOfErrors;
         private int noOfContinuousErrors;
-        private string lastExMsg;
         private int status;
 
         private Thread bgThread; //Subscription controller thread
@@ -79,7 +74,9 @@ namespace Devbridge.AzureMessaging
             Stop();
 
             if (Interlocked.CompareExchange(ref status, WorkerStatus.Disposed, WorkerStatus.Stopped) != WorkerStatus.Stopped)
+            {
                 Interlocked.CompareExchange(ref status, WorkerStatus.Disposed, WorkerStatus.Stopping);
+            }
 
             try
             {
@@ -109,7 +106,10 @@ namespace Devbridge.AzureMessaging
         private void DisposeWorkerThreads()
         {
             Log.Debug("Disposing all Azure MQ Server worker threads...");
-            if (workers != null) Array.ForEach(workers, x => x.Dispose());
+            if (workers != null)
+            {
+                Array.ForEach(workers, x => x.Dispose());
+            }
         }
 
         void WorkerErrorHandler(AzureMessageHandlerWorker source, Exception ex)
@@ -214,7 +214,6 @@ namespace Devbridge.AzureMessaging
                 sb.AppendLine("Times Started: " + Interlocked.CompareExchange(ref timesStarted, 0, 0));
                 sb.AppendLine("Num of Errors: " + Interlocked.CompareExchange(ref noOfErrors, 0, 0));
                 sb.AppendLine("Num of Continuous Errors: " + Interlocked.CompareExchange(ref noOfContinuousErrors, 0, 0));
-                sb.AppendLine("Last ErrorMsg: " + lastExMsg);
                 sb.AppendLine("===============");
                 foreach (var worker in workers)
                 {
@@ -276,6 +275,7 @@ namespace Devbridge.AzureMessaging
                 StartWorkerThreads();
                 return;
             }
+
             if (Interlocked.CompareExchange(ref status, 0, 0) == WorkerStatus.Disposed)
             {
                 throw new ObjectDisposedException("MQ Host has been disposed");
@@ -333,46 +333,6 @@ namespace Devbridge.AzureMessaging
                 return;
             }
             Interlocked.Increment(ref timesStarted);
-
-            try
-            {
-                ////RESET
-                //while (Interlocked.CompareExchange(ref status, 0, 0) == WorkerStatus.Started)
-                //{
-                //    //Record that we had a good run...
-                //    Interlocked.CompareExchange(ref noOfContinuousErrors, 0, noOfContinuousErrors);
-                //}
-
-                //StopWorkerThreads();
-            }
-            catch (Exception ex)
-            {
-                lastExMsg = ex.Message;
-                Interlocked.Increment(ref noOfErrors);
-                Interlocked.Increment(ref noOfContinuousErrors);
-
-                if (Interlocked.CompareExchange(ref status, WorkerStatus.Stopped, WorkerStatus.Started) != WorkerStatus.Started)
-                    Interlocked.CompareExchange(ref status, WorkerStatus.Stopped, WorkerStatus.Stopping);
-
-                StopWorkerThreads();
-
-                if (ErrorHandler != null)
-                {
-                    ErrorHandler(ex);
-                }
-
-                if (KeepAliveRetryAfterMs != null)
-                {
-                    Thread.Sleep(KeepAliveRetryAfterMs.Value);
-                    Start();
-                }
-            }
-        }
-
-        public void StopWorkerThreads()
-        {
-            Log.Debug("Stopping all Azure MQ Server worker threads...");
-            Array.ForEach(workers, x => x.Stop());
         }
 
         private void KillBgThreadIfExists()
@@ -418,7 +378,9 @@ namespace Devbridge.AzureMessaging
         public void Stop()
         {
             if (Interlocked.CompareExchange(ref status, 0, 0) == WorkerStatus.Disposed)
+            {
                 throw new ObjectDisposedException("MQ Host has been disposed");
+            }
 
             if (Interlocked.CompareExchange(ref status, WorkerStatus.Stopping, WorkerStatus.Started) == WorkerStatus.Started)
             {
