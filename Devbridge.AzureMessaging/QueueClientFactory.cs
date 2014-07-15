@@ -28,6 +28,28 @@ namespace Devbridge.AzureMessaging
             var namespaceManager = NamespaceManager.CreateFromConnectionString(connectionString);
 
             // Create queue if not exists:
+            try
+            {
+                TryCreateQueueIfNotExists(namespaceManager, queueName);
+            }
+            catch (MessagingException ex)
+            {
+                //If queue was deleted recently Service Bus may throw Microsoft.ServiceBus.Messaging.MessagingException. Then we have to retry to create queue.
+                if (ex.IsTransient) //Check this property to determine if the operation should be retried.
+                {
+                    TryCreateQueueIfNotExists(namespaceManager, queueName);
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return azureQueueClient;
+        }
+
+        private void TryCreateQueueIfNotExists(NamespaceManager namespaceManager, string queueName)
+        {
             if (!namespaceManager.QueueExists(queueName))
             {
                 var queueDescription = new QueueDescription(queueName)
@@ -40,8 +62,6 @@ namespace Devbridge.AzureMessaging
 
                 namespaceManager.CreateQueue(queueDescription);
             }
-
-            return azureQueueClient;
         }
     }
 }

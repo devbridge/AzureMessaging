@@ -54,7 +54,6 @@ namespace Devbridge.AzureMessaging.Tests
         }
 
         [Test]
-        [Ignore("Run manually only")]
         public void Should_Delay_Message_Processing()
         {
             var queueClientFactory = new QueueClientFactory(ConnectionString);
@@ -67,7 +66,7 @@ namespace Devbridge.AzureMessaging.Tests
             {
                 NoOfThreads = 1,
                 NoOfRetries = 1,
-                IntervalBetweenRetries = TimeSpan.FromSeconds(10),
+                IntervalBetweenRetries = TimeSpan.FromSeconds(40),  //Actual interval maybe different if client and Azure Service Bus times are not synchronized.
                 DuplicateIntervalWithEachRetry = false
             };
 
@@ -92,7 +91,7 @@ namespace Devbridge.AzureMessaging.Tests
 
             client.Publish(new GreetWorldDelayTestMessage { Name = "Delayed message" });
 
-            Thread.Sleep((int)TimeSpan.FromSeconds(15).TotalMilliseconds);
+            Thread.Sleep((int)TimeSpan.FromSeconds(45).TotalMilliseconds);
 
             Assert.That(server.GetStats().TotalMessagesProcessed, Is.EqualTo(2));
             Assert.That(callCount, Is.EqualTo(2));
