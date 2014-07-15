@@ -52,6 +52,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AzureMessagingTests.cs" />
+    <Compile Include="Messages\GreetWorldDelayTestMessage.cs" />
+    <Compile Include="Messages\GreetWorldTestMessage.cs" />
+    <Compile Include="Messages\GreetTestMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

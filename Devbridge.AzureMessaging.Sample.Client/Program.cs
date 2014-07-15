@@ -11,7 +11,7 @@ namespace Devbridge.AzureMessaging.Sample.Client
             var clientFactory = new AzureMessageClientFactory(queueClientFactory);
             var client = clientFactory.CreateMessageQueueClient();
 
-            client.Publish(new GreetMessage { Text = "Client hello" });
+            client.Publish(new GreetSampleMessage { Text = "Client hello" });
         }
     }
 }

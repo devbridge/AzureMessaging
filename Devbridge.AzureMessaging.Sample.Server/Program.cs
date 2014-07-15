@@ -19,7 +19,7 @@ namespace Devbridge.AzureMessaging.Sample.Server
                 DuplicateIntervalWithEachRetry = true
             };
 
-            server.RegisterHandler<GreetMessage>(x =>
+            server.RegisterHandler<GreetSampleMessage>(x =>
             {
                 var greet = x.GetBody();
                 Console.WriteLine("Message from client: " + greet.Text);

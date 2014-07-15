@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Threading;
 using Devbridge.AzureMessaging.Extensions;
 using Devbridge.AzureMessaging.InMemory;
+using Devbridge.AzureMessaging.Tests.Messages;
 using NUnit.Framework;
 
 namespace Devbridge.AzureMessaging.Tests
@@ -28,20 +29,21 @@ namespace Devbridge.AzureMessaging.Tests
                 DuplicateIntervalWithEachRetry = true
             };
 
-            server.RegisterHandler<Greet>(x =>
+            server.RegisterHandler<GreetTestMessage>(x =>
             {
                 handlerCallCount++;
 
-                Trace.WriteLine("Greet: " + x.GetBody().Name);
-                return x.GetBody().Name;
+                Trace.WriteLine("GreetTestMessage: " + x.GetBody().Name);
+
+                return null;
             }, settings);
 
             server.Start();
 
-            client.Publish(new Greet { Name = "1" });
-            client.Publish(new Greet { Name = "2" });
-            client.Publish(new Greet { Name = "3" });
-            client.Publish(new Greet { Name = "4" });
+            client.Publish(new GreetTestMessage { Name = "1" });
+            client.Publish(new GreetTestMessage { Name = "2" });
+            client.Publish(new GreetTestMessage { Name = "3" });
+            client.Publish(new GreetTestMessage { Name = "4" });
 
             Thread.Sleep(3000);
 
@@ -65,15 +67,15 @@ namespace Devbridge.AzureMessaging.Tests
             {
                 NoOfThreads = 1,
                 NoOfRetries = 1,
-                IntervalBetweenRetries = TimeSpan.FromSeconds(45),
+                IntervalBetweenRetries = TimeSpan.FromSeconds(10),
                 DuplicateIntervalWithEachRetry = false
             };
 
-            server.RegisterHandler<Greet>(x =>
+            server.RegisterHandler<GreetWorldDelayTestMessage>(x =>
             {
                 callCount++;
 
-                Trace.Write("Greet: " + x.GetBody().Name + " " + callCount + " " + DateTime.Now.ToLongTimeString());
+                Trace.Write("GreetWorldDelayTestMessage: " + x.GetBody().Name + " " + callCount + " " + DateTime.Now.ToLongTimeString());
 
                 if (callCount == 1)
                 {
@@ -83,14 +85,14 @@ namespace Devbridge.AzureMessaging.Tests
 
                 Trace.WriteLine(" (succeed)");
 
-                return x.GetBody().Name;
+                return null;
             }, settings);
 
             server.Start();
 
-            client.Publish(new Greet { Name = "Delayed message" });
+            client.Publish(new GreetWorldDelayTestMessage { Name = "Delayed message" });
 
-            Thread.Sleep((int)TimeSpan.FromSeconds(50).TotalMilliseconds);
+            Thread.Sleep((int)TimeSpan.FromSeconds(15).TotalMilliseconds);
 
             Assert.That(server.GetStats().TotalMessagesProcessed, Is.EqualTo(2));
             Assert.That(callCount, Is.EqualTo(2));
@@ -107,7 +109,7 @@ namespace Devbridge.AzureMessaging.Tests
 
             server.Start();
 
-            var deadMessages = server.GetDeadLetteredMessages<Greet>(ConnectionString);
+            var deadMessages = server.GetDeadLetteredMessages<GreetTestMessage>(ConnectionString);
 
             Assert.That(deadMessages.Count, Is.GreaterThan(0));
 
@@ -123,26 +125,28 @@ namespace Devbridge.AzureMessaging.Tests
             var handlerCallCount = 0;
             var settings = new MessageHandlerSettings();
 
-            server.RegisterHandler<Greet>(x =>
+            server.RegisterHandler<GreetTestMessage>(x =>
             {
                 handlerCallCount++;
-                Trace.WriteLine("Greet: " + x.GetBody().Name);
-                return x.GetBody().Name;
+                Trace.WriteLine("GreetTestMessage: " + x.GetBody().Name);
+
+                return null;
             }, settings);
 
-            server.RegisterHandler<GreetWorld>(x =>
+            server.RegisterHandler<GreetWorldTestMessage>(x =>
             {
                 handlerCallCount++;
-                Trace.WriteLine("World: " + x.GetBody().Name);
-                return x.GetBody().Name;
+                Trace.WriteLine("GreetWorldTestMessage: " + x.GetBody().Name);
+
+                return null;
             }, settings);
 
             server.Start();
 
-            client.Publish(new Greet { Name = "1" });
-            client.Publish(new Greet { Name = "2" });
-            client.Publish(new GreetWorld { Name = "3" });
-            client.Publish(new GreetWorld { Name = "4" });
+            client.Publish(new GreetTestMessage { Name = "1" });
+            client.Publish(new GreetTestMessage { Name = "2" });
+            client.Publish(new GreetWorldTestMessage { Name = "3" });
+            client.Publish(new GreetWorldTestMessage { Name = "4" });
 
             Thread.Sleep(3000);
 
@@ -172,15 +176,5 @@ namespace Devbridge.AzureMessaging.Tests
             newTime = timeSpan.IncreaseEnqueTime(5);
             Assert.That(newTime.TotalSeconds, Is.EqualTo(160D));
         }
-    }
-
-    public class Greet
-    {
-        public string Name { get; set; }
-    }
-
-    public class GreetWorld
-    {
-        public string Name { get; set; }
     }
 }
