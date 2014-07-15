@@ -23,7 +23,8 @@ namespace Devbridge.AzureMessaging.Sample.Server
             {
                 var greet = x.GetBody();
                 Console.WriteLine("Message from client: " + greet.Text);
-                return greet.Text;
+ 
+                return null;
             }, settings);
 
             server.Start();
