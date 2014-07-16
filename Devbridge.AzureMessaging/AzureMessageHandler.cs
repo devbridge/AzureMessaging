@@ -61,10 +61,14 @@ namespace Devbridge.AzureMessaging
                 result = processMessageFn(body);
 
                 message.Complete();
+
+                if (result != null && result.GetType().IsClass)
+                {
+                    //TODO: in the future add result to out queue
+                }
             }
             catch (Exception ex)
             {
-
                 Log.Error(string.Format("Unable process message. {0}: {1}", ex.GetType().Name, ex.Message), ex);
 
                 try
