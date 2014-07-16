@@ -25,7 +25,7 @@ public class GreetWorldSampleMessage
 **Note**: It is important to have unique class names, because queue name is constructed from type name.
 
 
-##Server usage
+##Server Usage
 
 Usage code:
 
@@ -81,7 +81,7 @@ var deadMessages = AzureMessageService.GetDeadLetteredMessages<GreetSampleMessag
 
 **Note**: Currently handler return result is not processed. In the future we plan to place returned result to queue if result is a class (not null or primitive type).
 
-##Client usage
+##Client Usage
 
 Usage code:
 
@@ -98,7 +98,7 @@ client.Publish(new GreetWorldSampleMessage { Name = "Greet", Description = "Hell
 
 ```
 
-##Additional notes
+##Additional Notes
 
 When registering handlers, if database repository is used, need to create LifeTime scope, so that new NHibernate session is created and properly disposed for each message.
 
@@ -118,7 +118,7 @@ server.RegisterHandler<QbCreateOrUpdateProduct>(message =>
 
 ```
 
-##Easily testable
+##Easily Testable
 
 There is also an InMemoryQueueClientFactory available, useful for development & testing.
 
