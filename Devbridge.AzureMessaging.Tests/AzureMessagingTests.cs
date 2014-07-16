@@ -66,7 +66,7 @@ namespace Devbridge.AzureMessaging.Tests
             {
                 NoOfThreads = 1,
                 NoOfRetries = 1,
-                IntervalBetweenRetries = TimeSpan.FromSeconds(40),  //Actual interval maybe different if client and Azure Service Bus times are not synchronized.
+                IntervalBetweenRetries = TimeSpan.FromSeconds(40),  //Actual interval may be different if client and Azure Service Bus times are not synchronized.
                 DuplicateIntervalWithEachRetry = false
             };
 
@@ -125,7 +125,7 @@ namespace Devbridge.AzureMessaging.Tests
 
             Thread.Sleep(1000);
 
-            var deadMessages = server.GetDeadLetteredMessages<DeadLetterTestMessage>(ConnectionString);
+            var deadMessages = AzureMessageService.GetDeadLetteredMessages<DeadLetterTestMessage>(ConnectionString);
 
             Assert.That(deadMessages.Count, Is.GreaterThan(0));
 

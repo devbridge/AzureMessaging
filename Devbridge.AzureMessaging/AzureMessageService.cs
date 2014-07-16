@@ -394,7 +394,7 @@ namespace Devbridge.AzureMessaging
             Array.ForEach(workers, x => x.Start());
         }
 
-        public List<IMessage<T>> GetDeadLetteredMessages<T>(string connectionString)
+        public static List<IMessage<T>> GetDeadLetteredMessages<T>(string connectionString)
         {
             var messagingFactory = MessagingFactory.CreateFromConnectionString(connectionString);
 
