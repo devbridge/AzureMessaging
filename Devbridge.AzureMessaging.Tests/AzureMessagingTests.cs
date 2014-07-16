@@ -70,7 +70,7 @@ namespace Devbridge.AzureMessaging.Tests
                 DuplicateIntervalWithEachRetry = false
             };
 
-            server.RegisterHandler<GreetWorldDelayTestMessage>(x =>
+            server.RegisterHandler<DelayTestMessage>(x =>
             {
                 callCount++;
 
@@ -89,7 +89,7 @@ namespace Devbridge.AzureMessaging.Tests
 
             server.Start();
 
-            client.Publish(new GreetWorldDelayTestMessage { Name = "Delayed message" });
+            client.Publish(new DelayTestMessage { Name = "Delayed message" });
 
             Thread.Sleep((int)TimeSpan.FromSeconds(45).TotalMilliseconds);
 
@@ -100,15 +100,32 @@ namespace Devbridge.AzureMessaging.Tests
         }
 
         [Test]
-        [Ignore("Experimental Feature")]
         public void Should_Check_Dead_Letter_Queue()
         {
             var queueClientFactory = new QueueClientFactory(ConnectionString);
             var server = new AzureMessageService(queueClientFactory);
 
+            var settings = new MessageHandlerSettings
+            {
+                NoOfThreads = 1,
+                NoOfRetries = 1,
+                IntervalBetweenRetries = TimeSpan.FromSeconds(1),
+                DuplicateIntervalWithEachRetry = true
+            };
+
+            server.RegisterHandler<DeadLetterTestMessage>(x =>
+            {
+                throw new Exception("Simulated fail");
+            }, settings);
+
             server.Start();
 
-            var deadMessages = server.GetDeadLetteredMessages<GreetTestMessage>(ConnectionString);
+            var client = server.MessageFactory.CreateMessageQueueClient();
+            client.Publish(new DeadLetterTestMessage { Name = "test" });
+
+            Thread.Sleep(1000);
+
+            var deadMessages = server.GetDeadLetteredMessages<DeadLetterTestMessage>(ConnectionString);
 
             Assert.That(deadMessages.Count, Is.GreaterThan(0));
 

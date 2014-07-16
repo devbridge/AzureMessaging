@@ -396,15 +396,14 @@ namespace Devbridge.AzureMessaging
 
         public List<IMessage<T>> GetDeadLetteredMessages<T>(string connectionString)
         {
-            var queueName = typeof(T).QueueName() + "/$DeadLetterQueue";
-
             var messagingFactory = MessagingFactory.CreateFromConnectionString(connectionString);
 
-            var queueClient = messagingFactory.CreateQueueClient(queueName, ReceiveMode.ReceiveAndDelete);
+            var queueName = typeof(T).QueueName();
+            var queueClient = messagingFactory.CreateQueueClient(QueueClient.FormatDeadLetterPath(queueName), ReceiveMode.ReceiveAndDelete);
 
             var items = new List<IMessage<T>>();
 
-            var brokeredMessages = queueClient.PeekBatch(10);
+            var brokeredMessages = queueClient.ReceiveBatch(10);
 
             if (brokeredMessages == null)
             {
@@ -413,8 +412,6 @@ namespace Devbridge.AzureMessaging
 
             foreach (var brokeredMessage in brokeredMessages)
             {
-                brokeredMessage.Complete();
-
                 var messageBody = brokeredMessage.GetBody<string>();
                 var message = messageBody.DeserializeToMessage<T>();
 

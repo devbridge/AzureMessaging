@@ -1,6 +1,6 @@
 namespace Devbridge.AzureMessaging.Tests.Messages
 {
-    public class GreetWorldDelayTestMessage
+    public class DelayTestMessage
     {
         public string Name { get; set; }
     }
