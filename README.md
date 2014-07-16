@@ -97,3 +97,56 @@ client.Publish(new GreetSampleMessage { Text = "Hello2" });
 client.Publish(new GreetWorldSampleMessage { Name = "Greet", Description = "Hellow world" });
 
 ```
+
+##Additional notes
+
+When registering handlers, if database repository is used, need to create LifeTime scope, so that new NHibernate session is created and properly disposed for each message.
+
+```csharp
+server.RegisterHandler<QbCreateOrUpdateProduct>(message =>
+{
+    var body = message.GetBody();
+    var productId = body.ProductId;
+
+    using (var scope = BeginLifetimScope())
+    {
+        scope.Resolve<IProductService>().SaveProduct(productId);
+    }
+
+    return null;
+}, settings);
+
+```
+
+##Easily testable
+
+There is also an InMemoryQueueClientFactory available, useful for development & testing.
+
+
+```csharp
+var queueClientFactory = new InMemoryQueueClientFactory();
+var server = new AzureMessageService(queueClientFactory);
+```
+
+This will process messages without publishing into Azure Message Queue. It is usefull when debugging your own published messages.
+
+##Examples
+For more examples look in projects:
+* Devbridge.AzureMessaging.Sample.Server
+* Devbridge.AzureMessaging.Sample.Client
+* Devbridge.AzureMessaging.Tests
+
+To run examples and tests you need to set Azure Service Bus connection string in App.config file:
+```xml
+<appSettings>
+    <add key="ServiceBusConnectionString" value="SERVICE_BUS_CONNECTION_STRING" />
+</appSettings>
+```
+
+##License
+AzureMessaging is e freely distributable under the terms of an Apache V2 license.
+
+##Authors
+Tomas Kirda / [@tkirda](https://twitter.com/tkirda)
+<br>
+Paulius Grabauskas
