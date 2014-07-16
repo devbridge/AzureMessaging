@@ -32,7 +32,7 @@ namespace Devbridge.AzureMessaging.Sample.Server
             Console.WriteLine("Server started and waiting for messages from clients. To stop server press enter key.");
             Console.ReadLine();
 
-            server.Stop();
+            server.Dispose();
         }
     }
 }
