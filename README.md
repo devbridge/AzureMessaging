@@ -30,7 +30,7 @@ public class GreetWorldSampleMessage
 Usage code:
 
 ```csharp
-var queueClientFactory = new QueueClientFactory(SERVICE_BUS_CONNECTION_STRING);
+var queueClientFactory = new QueueClientFactory(SERVICE_BUS_CONNECTION_STRING_NAME);
 var server = new AzureMessageService(queueClientFactory);
 
 //Server settings
@@ -59,12 +59,15 @@ server.RegisterHandler<GreetWorldSampleMessage>(x =>
     return null;
 }, settings);
 
-//Start server
+//Start messages handling
 server.Start();
 
 ...
 
-//Stop server
+//Stop messages handling
+server.Stop();
+
+//Free resources
 server.Dispose();
 ```
 MessageHandlerSettings:
@@ -76,7 +79,7 @@ MessageHandlerSettings:
 
 Get messages from Dead Letter Queue:
 ```csharp
-var deadMessages = AzureMessageService.GetDeadLetteredMessages<GreetSampleMessage>(SERVICE_BUS_CONNECTION_STRING);
+var deadMessages = AzureMessageService.GetDeadLetteredMessages<GreetSampleMessage>(SERVICE_BUS_CONNECTION_STRING_NAME);
 ```
 
 **Note**: Currently handler return result is not processed. In the future we plan to place returned result to queue if result is a class (not null or primitive type).
@@ -87,7 +90,7 @@ Usage code:
 
 ```csharp
 //Create client
-var queueClientFactory = new QueueClientFactory(SERVICE_BUS_CONNECTION_STRING);
+var queueClientFactory = new QueueClientFactory(SERVICE_BUS_CONNECTION_STRING_NAME);
 var clientFactory = new AzureMessageClientFactory(queueClientFactory);
 var client = clientFactory.CreateMessageQueueClient();
 
@@ -138,9 +141,9 @@ For more examples look in projects:
 
 To run examples and tests you need to set Azure Service Bus connection string in App.config file:
 ```xml
-<appSettings>
-    <add key="ServiceBusConnectionString" value="SERVICE_BUS_CONNECTION_STRING" />
-</appSettings>
+<connectionStrings>
+    <add name="ServiceBusConnectionString" connectionString="SERVICE_BUS_CONNECTION_STRING" />
+</connectionStrings>
 ```
 
 ##License

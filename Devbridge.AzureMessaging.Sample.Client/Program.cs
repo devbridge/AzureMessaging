@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 using System.Text;
 using Devbridge.AzureMessaging.Sample.Common;
 
@@ -9,7 +8,7 @@ namespace Devbridge.AzureMessaging.Sample.Client
     {
         static void Main(string[] args)
         {
-            var queueClientFactory = new QueueClientFactory(ConfigurationManager.AppSettings["ServiceBusConnectionString"]);
+            var queueClientFactory = new QueueClientFactory("ServiceBusConnectionString");
             var clientFactory = new AzureMessageClientFactory(queueClientFactory);
             var client = clientFactory.CreateMessageQueueClient();
 

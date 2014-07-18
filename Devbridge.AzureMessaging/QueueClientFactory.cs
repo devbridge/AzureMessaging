@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using Devbridge.AzureMessaging.Interfaces;
 using Microsoft.ServiceBus;
 using Microsoft.ServiceBus.Messaging;
@@ -9,9 +10,14 @@ namespace Devbridge.AzureMessaging
     {
         private readonly string connectionString;
 
-        public QueueClientFactory(string connectionString)
+        public QueueClientFactory(string connectionStringName)
         {
-            this.connectionString = connectionString;
+            var connectionStringSettings = ConfigurationManager.ConnectionStrings[connectionStringName];
+            if (connectionStringSettings == null)
+            {
+                throw new ArgumentException("Invalid connection string name has been supplied", "connectionStringName");
+            }
+            connectionString = connectionStringSettings.ConnectionString;
         }
 
         public IAzureQueueClient Create(string queueName, bool checkIfExists = false)

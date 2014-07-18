@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -394,9 +395,14 @@ namespace Devbridge.AzureMessaging
             Array.ForEach(workers, x => x.Start());
         }
 
-        public static List<IMessage<T>> GetDeadLetteredMessages<T>(string connectionString)
+        public static List<IMessage<T>> GetDeadLetteredMessages<T>(string connectionStringName)
         {
-            var messagingFactory = MessagingFactory.CreateFromConnectionString(connectionString);
+            var connectionStringSettings = ConfigurationManager.ConnectionStrings[connectionStringName];
+            if (connectionStringSettings == null)
+            {
+                throw new ArgumentException("Invalid connection string name has been supplied", "connectionStringName");
+            }
+            var messagingFactory = MessagingFactory.CreateFromConnectionString(connectionStringSettings.ConnectionString);
 
             var queueName = typeof(T).QueueName();
             var queueClient = messagingFactory.CreateQueueClient(QueueClient.FormatDeadLetterPath(queueName), ReceiveMode.ReceiveAndDelete);

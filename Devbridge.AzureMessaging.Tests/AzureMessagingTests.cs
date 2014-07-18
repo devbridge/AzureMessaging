@@ -1,5 +1,4 @@
 using System;
-using System.Configuration;
 using System.Diagnostics;
 using System.Threading;
 using Devbridge.AzureMessaging.Extensions;
@@ -11,12 +10,12 @@ namespace Devbridge.AzureMessaging.Tests
 {
     public class AzureMessageServiceTests
     {
-        private readonly string ConnectionString = ConfigurationManager.AppSettings["ServiceBusConnectionString"];
+        private const string ConnectionStringName = "ServiceBusConnectionString";
 
         [Test]
         public void Does_Process_All_Published_Messages()
         {
-            var queueClientFactory = new QueueClientFactory(ConnectionString);
+            var queueClientFactory = new QueueClientFactory(ConnectionStringName);
             var server = new AzureMessageService(queueClientFactory);
 
             var client = server.MessageFactory.CreateMessageQueueClient();
@@ -56,7 +55,7 @@ namespace Devbridge.AzureMessaging.Tests
         [Test]
         public void Should_Delay_Message_Processing()
         {
-            var queueClientFactory = new QueueClientFactory(ConnectionString);
+            var queueClientFactory = new QueueClientFactory(ConnectionStringName);
             var server = new AzureMessageService(queueClientFactory);
 
 
@@ -102,7 +101,7 @@ namespace Devbridge.AzureMessaging.Tests
         [Test]
         public void Should_Check_Dead_Letter_Queue()
         {
-            var queueClientFactory = new QueueClientFactory(ConnectionString);
+            var queueClientFactory = new QueueClientFactory(ConnectionStringName);
             var server = new AzureMessageService(queueClientFactory);
 
             var settings = new MessageHandlerSettings
@@ -125,7 +124,7 @@ namespace Devbridge.AzureMessaging.Tests
 
             Thread.Sleep(1000);
 
-            var deadMessages = AzureMessageService.GetDeadLetteredMessages<DeadLetterTestMessage>(ConnectionString);
+            var deadMessages = AzureMessageService.GetDeadLetteredMessages<DeadLetterTestMessage>(ConnectionStringName);
 
             Assert.That(deadMessages.Count, Is.GreaterThan(0));
 
