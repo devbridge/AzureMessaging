@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{DB7AFA3C-F2CC-42C3-A9FF-959FA0CE8CA4}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Devbridge.AzureMessaging.NugetPackage</RootNamespace>
+    <AssemblyName>Devbridge.AzureMessaging.NugetPackage</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="DevBridge.AzureMessaging.nuspec.template" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Devbridge.AzureMessaging\Devbridge.AzureMessaging.csproj">
+      <Project>{904E1E36-5536-417C-A91F-89834BFA2365}</Project>
+      <Name>Devbridge.AzureMessaging</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>mkdir "$(ProjectDir)$(OutDir)packages"
+
+rem --- Creating Devbridge.AzureMessaging package -------------------------------------------------------------------------------
+mkdir "$(ProjectDir)$(OutDir)packages\Devbridge.AzureMessaging"
+mkdir "$(ProjectDir)$(OutDir)packages\Devbridge.AzureMessaging\lib"
+mkdir "$(ProjectDir)$(OutDir)packages\Devbridge.AzureMessaging\lib\net40"
+
+xcopy "$(ProjectDir)$(OutDir)Devbridge.AzureMessaging.dll" "$(ProjectDir)$(OutDir)packages\Devbridge.AzureMessaging\lib\net40\" /Y /Q
+
+"$(ProjectDir)$(OutDir)Devbridge.AzureMessaging.NugetPackage.exe" "$(ProjectDir)DevBridge.AzureMessaging.nuspec.template" "$(ProjectDir)$(OutDir)packages\Devbridge.AzureMessaging\DevBridge.AzureMessaging.nuspec"
+"$(SolutionDir).nuget\nuget.exe" pack "$(ProjectDir)$(OutDir)packages\Devbridge.AzureMessaging\DevBridge.AzureMessaging.nuspec" -OutputDirectory "$(ProjectDir)$(OutDir)\" -NoPackageAnalysis</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

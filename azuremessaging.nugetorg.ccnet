@@ -1,0 +1,128 @@
+<project>
+
+  <parameters>
+    <textParameter>
+      <name>CodeBranch</name>
+      <display>Source code branch</display>
+      <required>true</required>
+      <default>master</default>
+      <minimum>2</minimum>
+    </textParameter>
+
+    <textParameter>
+      <name>CodeVersion</name>
+      <display>3 digits version to apply (ex. 1.0.5) or default 1.0.0</display>
+      <description>A version to use for the release tagging.</description>
+      <required>true</required>
+      <default>1.0.0</default>
+      <minimum>5</minimum>
+      <maximum>11</maximum>
+    </textParameter>
+
+    <selectParameter>
+      <name>CodeMilestone</name>
+      <display>Milestone</display>
+      <allowedValues>
+        <value name="None"></value>
+        <value name="Alpha">-alpha</value>
+        <value name="Beta">-beta</value>
+        <value name="RC">-rc</value>
+      </allowedValues>
+      <default>None</default>
+    </selectParameter>
+
+    <textParameter>
+      <name>CodeMilestoneCounter</name>
+      <display>Milestone Counter</display>
+      <default></default>
+      <required>false</required>
+    </textParameter>
+
+  </parameters>
+
+  <name>Devbridge.AzureMessaging (nuget.org)</name>
+  <category>DevBridge</category>
+  <workingDirectory>$(buildsFolder)\AzureMessaging_NUGETORG\Code</workingDirectory>
+  <artifactDirectory>$(buildsFolder)\AzureMessaging_NUGETORG\Artifact</artifactDirectory>
+  <webURL>$(ccnetUrl)/server/local/project/AzureMessaging%20%28nuget.org%29/ViewProjectReport.aspx</webURL>
+
+  <modificationDelaySeconds>30</modificationDelaySeconds>
+
+  <labeller type="defaultlabeller">
+    <initialBuildLabel>0</initialBuildLabel>
+    <prefix>$[CodeVersion].</prefix>
+    <incrementOnFailure>false</incrementOnFailure>
+    <labelFormat>0</labelFormat>
+  </labeller>
+
+  <cb:define CodeBuildTagName="$[CodeVersion]$[CodeMilestone]$[CodeMilestoneCounter]" />
+  <cb:define CodeBuildTagMessage="Tagging build with a $[CodeVersion]$[CodeMilestone]$[CodeMilestoneCounter] version." />
+
+  <sourcecontrol type="git">
+    <repository>git@github.com:devbridge/AzureMessaging.git</repository>
+    <branch>$[CodeBranch]</branch>
+    <autoGetSource>true</autoGetSource>
+    <fetchSubmodules>true</fetchSubmodules>
+    <executable>$(gitPath)</executable>
+    <tagOnSuccess>true</tagOnSuccess>
+    <commitBuildModifications>false</commitBuildModifications>
+    <commitUntrackedFiles>false</commitUntrackedFiles>
+    <workingDirectory>$(buildsFolder)\AzureMessaging_NUGETORG\Code</workingDirectory>
+    <tagCommitMessage>$(CodeBuildTagMessage)</tagCommitMessage>
+    <tagNameFormat>$(CodeBuildTagName)</tagNameFormat>
+    <timeout>60000</timeout>
+  </sourcecontrol>
+
+  <triggers>
+    <!-- BUILD STARTS MANUALY! -->
+  </triggers>
+
+  <tasks>
+    <exec description="Update assembly info file with build version.">
+      <executable>$(ccnetextensionsConsole)</executable>
+      <buildArgs>UpdateAssemblyInfo $(buildsFolder)\AzureMessaging_NUGETORG\Code\Devbridge.AzureMessaging\Properties\AssemblyInfo.cs $[$CCNetLabel] $[$CCNetLabel] $[CodeVersion]$[CodeMilestone]$[CodeMilestoneCounter]</buildArgs>
+      <buildTimeoutSeconds>300</buildTimeoutSeconds>
+    </exec>
+
+    <exec description="Copy Devbridge.AzureMessaging.Tests App.config.">
+      <executable>cmd.exe</executable>
+      <buildArgs>/c echo f|xcopy/r/y $(buildsFolder)\AzureMessaging_NUGETORG\tests.App.config $(buildsFolder)\AzureMessaging_NUGETORG\Code\Devbridge.AzureMessaging.Tests\App.config</buildArgs>
+      <buildTimeoutSeconds>300</buildTimeoutSeconds>
+    </exec>
+
+    <exec description="Build Devbridge.AzureMessaging solution.">
+      <executable>$(msbuild4Path)</executable>
+      <buildArgs>$(buildsFolder)\AzureMessaging_NUGETORG\Code\Devbridge.AzureMessaging.sln /nologo /t:Rebuild /p:Configuration=Release</buildArgs>
+      <buildTimeoutSeconds>300</buildTimeoutSeconds>
+    </exec>
+
+    <exec description="Run Devbridge.AzureMessaging.Tests tests.">
+      <executable>$(nunitConsole)</executable>
+      <buildArgs>$(buildsFolder)\AzureMessaging_NUGETORG\Code\Devbridge.AzureMessaging.Tests\bin\Release\Devbridge.AzureMessaging.Tests.dll /xml:$(buildsFolder)\AzureMessaging_NUGETORG\Artifact\Devbridge.AzureMessaging.Tests-Results.xml</buildArgs>
+    </exec>
+
+    <exec description="Publish Devbridge.AzureMessaging to NuGet.org">
+      <executable>$(buildsFolder)\AzureMessaging_NUGETORG\Code\.nuget\nuget</executable>
+      <buildArgs>push $(buildsFolder)\AzureMessaging_NUGETORG\Code\Devbridge.AzureMessaging.NugetPackage\bin\Release\DevBridge.AzureMessaging.$[CodeVersion]$[CodeMilestone]$[CodeMilestoneCounter].nupkg</buildArgs>
+      <buildTimeoutSeconds>600</buildTimeoutSeconds>
+    </exec>
+
+    <exec description="Clean up project.">
+      <executable>$(msbuild4Path)</executable>
+      <buildArgs>$(buildsFolder)\AzureMessaging_NUGETORG\Code\Devbridge.AzureMessaging.sln /nologo /t:Clean</buildArgs>
+      <buildTimeoutSeconds>300</buildTimeoutSeconds>
+    </exec>
+  </tasks>
+
+  <publishers>
+    <merge>
+      <files>
+        <file>$(buildsFolder)\AzureMessaging_NUGETORG\Artifact\*-results.xml</file>
+      </files>
+    </merge>
+    <xmllogger />
+    <statistics />
+    <modificationHistory onlyLogWhenChangesFound="true" />
+  </publishers>
+
+</project>
