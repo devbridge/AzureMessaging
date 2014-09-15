@@ -79,7 +79,7 @@ MessageHandlerSettings:
 
 Get messages from Dead Letter Queue:
 ```csharp
-var deadMessages = AzureMessageService.GetDeadLetteredMessages<GreetSampleMessage>(SERVICE_BUS_CONNECTION_STRING_NAME);
+var deadMessages = AzureMessageService.GetDeadLetteredMessages<GreetSampleMessage>(SERVICE_BUS_CONNECTION_STRING_NAME, messagesCount: 10, deleteAfterReceiving: true);
 ```
 
 **Note**: Currently handler return result is not processed. In the future we plan to place returned result to queue if result is a class (not null or primitive type).

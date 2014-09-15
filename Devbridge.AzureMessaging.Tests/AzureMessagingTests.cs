@@ -108,8 +108,8 @@ namespace Devbridge.AzureMessaging.Tests
             {
                 NoOfThreads = 1,
                 NoOfRetries = 1,
-                IntervalBetweenRetries = TimeSpan.FromSeconds(1),
-                DuplicateIntervalWithEachRetry = true
+                IntervalBetweenRetries = TimeSpan.FromSeconds(0),
+                DuplicateIntervalWithEachRetry = false
             };
 
             server.RegisterHandler<DeadLetterTestMessage>(x =>
@@ -124,9 +124,11 @@ namespace Devbridge.AzureMessaging.Tests
 
             Thread.Sleep(1000);
 
-            var deadMessages = AzureMessageService.GetDeadLetteredMessages<DeadLetterTestMessage>(ConnectionStringName);
-
+            var deadMessages = AzureMessageService.GetDeadLetteredMessages<DeadLetterTestMessage>(ConnectionStringName, deleteAfterReceiving: false);
             Assert.That(deadMessages.Count, Is.GreaterThan(0));
+
+            var deadMessages2 = AzureMessageService.GetDeadLetteredMessages<DeadLetterTestMessage>(ConnectionStringName);
+            Assert.That(deadMessages2.Count, Is.EqualTo(deadMessages.Count));
 
             server.Dispose();
         }

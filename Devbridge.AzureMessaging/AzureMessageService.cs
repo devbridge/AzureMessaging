@@ -395,7 +395,7 @@ namespace Devbridge.AzureMessaging
             Array.ForEach(workers, x => x.Start());
         }
 
-        public static List<IMessage<T>> GetDeadLetteredMessages<T>(string connectionStringName)
+        public static List<IMessage<T>> GetDeadLetteredMessages<T>(string connectionStringName, int messagesCount = 10, bool deleteAfterReceiving = true)
         {
             var connectionStringSettings = ConfigurationManager.ConnectionStrings[connectionStringName];
             if (connectionStringSettings == null)
@@ -405,11 +405,12 @@ namespace Devbridge.AzureMessaging
             var messagingFactory = MessagingFactory.CreateFromConnectionString(connectionStringSettings.ConnectionString);
 
             var queueName = typeof(T).QueueName();
-            var queueClient = messagingFactory.CreateQueueClient(QueueClient.FormatDeadLetterPath(queueName), ReceiveMode.ReceiveAndDelete);
+            var receiveMode = deleteAfterReceiving ? ReceiveMode.ReceiveAndDelete : ReceiveMode.PeekLock;
+            var queueClient = messagingFactory.CreateQueueClient(QueueClient.FormatDeadLetterPath(queueName), receiveMode);
 
             var items = new List<IMessage<T>>();
 
-            var brokeredMessages = queueClient.ReceiveBatch(10);
+            var brokeredMessages = queueClient.ReceiveBatch(messagesCount);
 
             if (brokeredMessages == null)
             {
@@ -418,6 +419,11 @@ namespace Devbridge.AzureMessaging
 
             foreach (var brokeredMessage in brokeredMessages)
             {
+                if (!deleteAfterReceiving)
+                {
+                    brokeredMessage.Abandon(); //Unlock message in queue
+                }
+
                 var messageBody = brokeredMessage.GetBody<string>();
                 var message = messageBody.DeserializeToMessage<T>();
 
