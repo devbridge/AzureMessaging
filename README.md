@@ -4,7 +4,19 @@ AzureMessaging
 An open source component for Azure Service Bus messaging which supports spawning any number of background threads for each message queue, so if processing a message is an IO intensive operation you can double the throughput by simply assigning 2 or more worker threads. Component supports automatic Retries on messages generating errors with Failed messages sent to a Dead Letter Queue when its Retry threshold is reached.
 
 ##Installation
-TODO
+
+To install AzureMessaging library, run the following command in the Package Manager Console:
+```code
+PM> Install-Package DevBridge.AzureMessaging
+```
+##Configuration
+
+Set Azure Service Bus connection string in Web.config/App.config file:
+```xml
+<connectionStrings>
+    <add name="ServiceBusConnectionString" connectionString="SERVICE_BUS_CONNECTION_STRING" />
+</connectionStrings>
+```
 
 ##Messages
 
