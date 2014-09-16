@@ -46,7 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="DevBridge.AzureMessaging.nuspec.template" />
+    <None Include="Devbridge.AzureMessaging.nuspec.template" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Devbridge.AzureMessaging\Devbridge.AzureMessaging.csproj">
@@ -65,8 +65,8 @@ mkdir "$(ProjectDir)$(OutDir)packages\Devbridge.AzureMessaging\lib\net40"
 
 xcopy "$(ProjectDir)$(OutDir)Devbridge.AzureMessaging.dll" "$(ProjectDir)$(OutDir)packages\Devbridge.AzureMessaging\lib\net40\" /Y /Q
 
-"$(ProjectDir)$(OutDir)Devbridge.AzureMessaging.NugetPackage.exe" "$(ProjectDir)DevBridge.AzureMessaging.nuspec.template" "$(ProjectDir)$(OutDir)packages\Devbridge.AzureMessaging\DevBridge.AzureMessaging.nuspec"
-"$(SolutionDir).nuget\nuget.exe" pack "$(ProjectDir)$(OutDir)packages\Devbridge.AzureMessaging\DevBridge.AzureMessaging.nuspec" -OutputDirectory "$(ProjectDir)$(OutDir)\" -NoPackageAnalysis</PostBuildEvent>
+"$(ProjectDir)$(OutDir)Devbridge.AzureMessaging.NugetPackage.exe" "$(ProjectDir)Devbridge.AzureMessaging.nuspec.template" "$(ProjectDir)$(OutDir)packages\Devbridge.AzureMessaging\Devbridge.AzureMessaging.nuspec"
+"$(SolutionDir).nuget\nuget.exe" pack "$(ProjectDir)$(OutDir)packages\Devbridge.AzureMessaging\Devbridge.AzureMessaging.nuspec" -OutputDirectory "$(ProjectDir)$(OutDir)\" -NoPackageAnalysis</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

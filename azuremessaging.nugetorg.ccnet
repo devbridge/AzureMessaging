@@ -103,7 +103,7 @@
 
     <exec description="Publish Devbridge.AzureMessaging to NuGet.org">
       <executable>$(buildsFolder)\AzureMessaging_NUGETORG\Code\.nuget\nuget</executable>
-      <buildArgs>push $(buildsFolder)\AzureMessaging_NUGETORG\Code\Devbridge.AzureMessaging.NugetPackage\bin\Release\DevBridge.AzureMessaging.$[CodeVersion]$[CodeMilestone]$[CodeMilestoneCounter].nupkg</buildArgs>
+      <buildArgs>push $(buildsFolder)\AzureMessaging_NUGETORG\Code\Devbridge.AzureMessaging.NugetPackage\bin\Release\Devbridge.AzureMessaging.$[CodeVersion]$[CodeMilestone]$[CodeMilestoneCounter].nupkg</buildArgs>
       <buildTimeoutSeconds>600</buildTimeoutSeconds>
     </exec>
 
