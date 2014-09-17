@@ -159,7 +159,7 @@ To run examples and tests you need to set Azure Service Bus connection string in
 ```
 
 ##License
-AzureMessaging is e freely distributable under the terms of an Apache V2 license.
+AzureMessaging is freely distributable under the terms of an Apache V2 license.
 
 ##Authors
 Tomas Kirda / [@tkirda](https://twitter.com/tkirda)
