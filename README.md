@@ -20,7 +20,7 @@ Set Azure Service Bus connection string in Web.config/App.config file:
 
 ##Messages
 
-Client with server comunicates by sending messages. Messages example:
+Client with server communicates by sending messages. Messages example:
 
 ```csharp
 public class GreetSampleMessage
@@ -31,7 +31,7 @@ public class GreetSampleMessage
 public class GreetWorldSampleMessage
 {
     public string Name { get; set; }
-    public string Decription { get; set; }
+    public string Description { get; set; }
 }
 ```
 **Note**: It is important to have unique class names, because queue name is constructed from type name.
@@ -54,7 +54,7 @@ var settings = new MessageHandlerSettings
     DuplicateIntervalWithEachRetry = true
 };
 
-//Register handers to handle messages from clients
+//Register handlers to handle messages from clients
 server.RegisterHandler<GreetSampleMessage>(x =>
 {
     var greetSampleMessage = x.GetBody();
@@ -109,7 +109,7 @@ var client = clientFactory.CreateMessageQueueClient();
 //Send messages
 client.Publish(new GreetSampleMessage { Text = "Hello" });
 client.Publish(new GreetSampleMessage { Text = "Hello2" });
-client.Publish(new GreetWorldSampleMessage { Name = "Greet", Description = "Hellow world" });
+client.Publish(new GreetWorldSampleMessage { Name = "Greet", Description = "Hello world" });
 
 ```
 
@@ -143,7 +143,7 @@ var queueClientFactory = new InMemoryQueueClientFactory();
 var server = new AzureMessageService(queueClientFactory);
 ```
 
-This will process messages without publishing into Azure Message Queue. It is usefull when debugging your own published messages.
+This will process messages without publishing into Azure Message Queue. It is useful when debugging your own published messages.
 
 ##Examples
 For more examples look in projects:
