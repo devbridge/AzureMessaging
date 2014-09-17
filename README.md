@@ -7,7 +7,7 @@ An open source component for Azure Service Bus messaging which supports spawning
 
 To install AzureMessaging library, run the following command in the Package Manager Console:
 ```code
-PM> Install-Package Devbridge.AzureMessaging
+PM> Install-Package AzureMessaging
 ```
 ##Configuration
 
