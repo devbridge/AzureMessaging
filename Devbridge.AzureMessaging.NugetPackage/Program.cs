@@ -16,8 +16,8 @@ namespace Devbridge.AzureMessaging.NugetPackage
         /// <param name="args">The args.</param>
         public static void Main(string[] args)
         {
-            var nugetTemplateFile = args[0];    //DevBridge.AzureMessaging.nuspec.template;
-            var nugetFile = args[1];            //DevBridge.AzureMessaging.nuspec;
+            var nugetTemplateFile = args[0];    //AzureMessaging.nuspec.template;
+            var nugetFile = args[1];            //AzureMessaging.nuspec;
             var version = GetVersion();
 
             using (var sr = new StreamReader(nugetTemplateFile))

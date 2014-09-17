@@ -46,7 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Devbridge.AzureMessaging.nuspec.template" />
+    <None Include="AzureMessaging.nuspec.template" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Devbridge.AzureMessaging\Devbridge.AzureMessaging.csproj">
@@ -58,15 +58,15 @@
   <PropertyGroup>
     <PostBuildEvent>mkdir "$(ProjectDir)$(OutDir)packages"
 
-rem --- Creating Devbridge.AzureMessaging package -------------------------------------------------------------------------------
-mkdir "$(ProjectDir)$(OutDir)packages\Devbridge.AzureMessaging"
-mkdir "$(ProjectDir)$(OutDir)packages\Devbridge.AzureMessaging\lib"
-mkdir "$(ProjectDir)$(OutDir)packages\Devbridge.AzureMessaging\lib\net40"
+rem --- Creating AzureMessaging package -------------------------------------------------------------------------------
+mkdir "$(ProjectDir)$(OutDir)packages\AzureMessaging"
+mkdir "$(ProjectDir)$(OutDir)packages\AzureMessaging\lib"
+mkdir "$(ProjectDir)$(OutDir)packages\AzureMessaging\lib\net40"
 
-xcopy "$(ProjectDir)$(OutDir)Devbridge.AzureMessaging.dll" "$(ProjectDir)$(OutDir)packages\Devbridge.AzureMessaging\lib\net40\" /Y /Q
+xcopy "$(ProjectDir)$(OutDir)AzureMessaging.dll" "$(ProjectDir)$(OutDir)packages\AzureMessaging\lib\net40\" /Y /Q
 
-"$(ProjectDir)$(OutDir)Devbridge.AzureMessaging.NugetPackage.exe" "$(ProjectDir)Devbridge.AzureMessaging.nuspec.template" "$(ProjectDir)$(OutDir)packages\Devbridge.AzureMessaging\Devbridge.AzureMessaging.nuspec"
-"$(SolutionDir).nuget\nuget.exe" pack "$(ProjectDir)$(OutDir)packages\Devbridge.AzureMessaging\Devbridge.AzureMessaging.nuspec" -OutputDirectory "$(ProjectDir)$(OutDir)\" -NoPackageAnalysis</PostBuildEvent>
+"$(ProjectDir)$(OutDir)Devbridge.AzureMessaging.NugetPackage.exe" "$(ProjectDir)AzureMessaging.nuspec.template" "$(ProjectDir)$(OutDir)packages\AzureMessaging\AzureMessaging.nuspec"
+"$(SolutionDir).nuget\nuget.exe" pack "$(ProjectDir)$(OutDir)packages\AzureMessaging\AzureMessaging.nuspec" -OutputDirectory "$(ProjectDir)$(OutDir)\" -NoPackageAnalysis</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

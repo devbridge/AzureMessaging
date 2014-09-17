@@ -40,7 +40,7 @@
 
   </parameters>
 
-  <name>Devbridge.AzureMessaging (nuget.org)</name>
+  <name>AzureMessaging (nuget.org)</name>
   <category>DevBridge</category>
   <workingDirectory>$(buildsFolder)\AzureMessaging_NUGETORG\Code</workingDirectory>
   <artifactDirectory>$(buildsFolder)\AzureMessaging_NUGETORG\Artifact</artifactDirectory>
@@ -101,9 +101,9 @@
       <buildArgs>$(buildsFolder)\AzureMessaging_NUGETORG\Code\Devbridge.AzureMessaging.Tests\bin\Release\Devbridge.AzureMessaging.Tests.dll /xml:$(buildsFolder)\AzureMessaging_NUGETORG\Artifact\Devbridge.AzureMessaging.Tests-Results.xml</buildArgs>
     </exec>
 
-    <exec description="Publish Devbridge.AzureMessaging to NuGet.org">
+    <exec description="Publish AzureMessaging to NuGet.org">
       <executable>$(buildsFolder)\AzureMessaging_NUGETORG\Code\.nuget\nuget</executable>
-      <buildArgs>push $(buildsFolder)\AzureMessaging_NUGETORG\Code\Devbridge.AzureMessaging.NugetPackage\bin\Release\Devbridge.AzureMessaging.$[CodeVersion]$[CodeMilestone]$[CodeMilestoneCounter].nupkg</buildArgs>
+      <buildArgs>push $(buildsFolder)\AzureMessaging_NUGETORG\Code\Devbridge.AzureMessaging.NugetPackage\bin\Release\AzureMessaging.$[CodeVersion]$[CodeMilestone]$[CodeMilestoneCounter].nupkg</buildArgs>
       <buildTimeoutSeconds>600</buildTimeoutSeconds>
     </exec>
 

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0"?>
 <package >
   <metadata>
-    <id>Devbridge.AzureMessaging</id>
+    <id>AzureMessaging</id>
     <version>@PackageVersion@</version>
     <authors>Tomas Kirda, Paulius Grabauskas</authors>
     <owners>devbridge</owners>
